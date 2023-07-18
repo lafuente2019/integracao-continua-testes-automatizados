@@ -10,6 +10,7 @@ on:
     branches: [ "*" ]
 
 jobs:
+  # TEST
   test:
     runs-on: ${{matrix.os}}
     env:
@@ -39,19 +40,23 @@ jobs:
       
     - name: Test
       run: go test -v main_test.go
-      
+
+  # BUILF    
   build:
     needs:  test
-    runs-on: ${{matrix.os}}
-    strategy:
-      matrix:
-        os: ['ubuntu-latest', 'ubuntu-20.04']
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: go build -v main.go
+      run: go build -v main.
+     
+    - name: Upload main compilado
+      uses: actions/upload-artifact@v3
+      with:
+        name: programa
+        path: main   
 
   docker:
     needs: build
-      uses: ./.github/workflows/docker.yaml
+    uses: ./.github/workflows/docker.yaml
 
